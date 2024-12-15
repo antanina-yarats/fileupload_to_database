@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "7777:7777"
+    environment:
+      PORT: 7777
+      POSTGRES_USER: tonia
+      POSTGRES_PASSWORD: 59ZcVPsNwTDZpQvkUuSG2pRgAICrCdq8
+      POSTGRES_DB: fileupload_database
+      POSTGRES_HOST: dpg-ctfd8cpu0jms739ljogg-a.frankfurt-postgres.render.com
+      POSTGRES_PORT: 5432
+    volumes:
+      - ./project.env:/app/project.env
+    command: ["deno", "run", "--allow-net", "--allow-read", "--allow-env", "--allow-write", "app.js"]
+    network_mode: bridge
+
+  flyway:
+    image: flyway/flyway:latest
+    depends_on:
+      app:
+        condition: service_started
+    command: >
+      -url=jdbc:postgresql://dpg-ctfd8cpu0jms739ljogg-a.frankfurt-postgres.render.com:5432/fileupload_database
+      -user=tonia
+      -password=59ZcVPsNwTDZpQvkUuSG2pRgAICrCdq8
+      migrate
+    volumes:
+      - ./flyway/sql:/flyway/sql
+    network_mode: bridge
