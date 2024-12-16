@@ -75,7 +75,8 @@ const uploadFile = async ({ request, response }) => {
     return;
   }
 
-  response.redirect("/"); 
+  response.status = 201;
+  response.body = { message: "File uploaded successfully.", password: pw };
 };
 
 const downloadFile = async ({ request, response }) => {
