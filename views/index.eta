@@ -1,6 +1,6 @@
 <h1>Files!</h1>
 
-<p id="lastUploadedId">Last added: <%= it.last_id < 0 ? "none" : it.last_id %></p>
+<p>Last added id: <%= it.last_id < 0 ? "none" : it.last_id %></p>
 
 <h2>Add file</h2>
 
@@ -19,44 +19,3 @@
   <input type="number" name="id" value="<%= it.last_id %>" required /><br />
   <input type="submit" value="Retrieve file" />
 </form>
-
-
-<script>
-  async function updateLastUploadedId() {
-    try {
-      const response = await fetch("/last-id");
-      const data = await response.json();
-      if (response.ok) {
-        document.getElementById("lastUploadedId").innerText = `Last added: ${data.last_id}`;
-      } else {
-        console.error("Error fetching last uploaded ID:", data.error);
-      }
-    } catch (err) {
-      console.error("Network error:", err);
-    }
-  }
-
-
-  const uploadForm = document.querySelector("form[enctype='multipart/form-data']");
-  uploadForm.addEventListener("submit", async (e) => {
-    e.preventDefault(); 
-    const formData = new FormData(uploadForm);
-
-
-    try {
-      const response = await fetch("/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const result = await response.json();
-      if (response.ok) {
-        alert(`File uploaded successfully! Password: ${result.password}`);
-        await updateLastUploadedId(); 
-      } else {
-        alert(`Error uploading file: ${result.error}`);
-      }
-    } catch (err) {
-      console.error("File upload failed:", err);
-    }
-  });
-</script>

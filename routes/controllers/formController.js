@@ -39,30 +39,26 @@ const uploadFile = async ({ request, response }) => {
   }
   console.log("File Details:", fileDetails);
 
- 
   let fileContents;
-try {
-  console.log("Attempting to read file:", fileDetails.filename);
-  const file = await Deno.open(fileDetails.filename); 
-  fileContents = await readAll(file); 
-  file.close(); 
-  console.log("File Contents Length:", fileContents.length); 
-} catch (err) {
-  console.error("Error processing file:", err);
-  response.status = 500;
-  response.body = { error: "Failed to process uploaded file." };
-  return;
-}
- 
+  try {
+    console.log("Attempting to read file:", fileDetails.filename);
+    const file = await Deno.open(fileDetails.filename);
+    fileContents = await readAll(file);
+    file.close();
+    console.log("File Contents Length:", fileContents.length);
+  } catch (err) {
+    console.error("Error processing file:", err);
+    response.status = 500;
+    response.body = { error: "Failed to process uploaded file." };
+    return;
+  }
 
- const base64Encoded = base64.fromUint8Array(fileContents);
+  const base64Encoded = base64.fromUint8Array(fileContents);
   console.log("Base64 Encoded Length:", base64Encoded.length);
 
-  
   const pw = `${Math.floor(100000 * Math.random())}`;
   console.log("Generated Password:", pw);
 
- 
   try {
     console.log("Inserting into database:", {
       name: fileDetails.originalName,
@@ -79,8 +75,7 @@ try {
     return;
   }
 
-  response.status = 201;
-  response.body = { message: "File uploaded successfully.", password: pw };
+  response.redirect("/"); 
 };
 
 const downloadFile = async ({ request, response }) => {
