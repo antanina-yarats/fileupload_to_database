@@ -39,7 +39,7 @@
 
   const uploadForm = document.querySelector("form[enctype='multipart/form-data']");
   uploadForm.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault(); 
     const formData = new FormData(uploadForm);
 
 
@@ -51,7 +51,7 @@
       const result = await response.json();
       if (response.ok) {
         alert(`File uploaded successfully! Password: ${result.password}`);
-        await updateLastUploadedId(); // Update the last uploaded ID dynamically
+        await updateLastUploadedId(); 
       } else {
         alert(`Error uploading file: ${result.error}`);
       }
