@@ -10,4 +10,4 @@ COPY . .
 
 ENV PORT=7777
 
-CMD ["run", "--allow-net", "--allow-env", "--allow-read", "app.js"]
+CMD ["run", "--allow-net", "--allow-env", "--allow-read", "--allow-write", "app.js"]
