@@ -5,12 +5,21 @@ import { readAll } from "https://deno.land/std@0.205.0/streams/mod.ts";
 
 
 const viewForm = async ({ render }) => {
-  console.log("Rendering form...");
-  const lastId = await lastUploadedId();
-  console.log("Last uploaded ID:", lastId);
-  render("index.eta", {
-    last_id: lastId,
-  });
+  try {
+    console.log("Fetching the last uploaded file ID...");
+    const lastId = await lastUploadedId(); // Fetch the last uploaded file ID
+    console.log("Fetched Last Uploaded ID for Homepage:", lastId);
+
+    // Render the form with the fetched ID
+    render("index.eta", {
+      last_id: lastId,
+    });
+  } catch (err) {
+    console.error("Error fetching the last uploaded ID:", err);
+    render("index.eta", {
+      last_id: -1, // Default value in case of an error
+    });
+  }
 };
 
 
